@@ -4,17 +4,11 @@ require('babel-register')({
     presets: ["es2015", "react", "stage-2"]
 });
 
-// import express from 'express';
-// import path from 'path';
-// import cookieParser from 'cookie-parser';
-// import bodyParser from 'body-parser';
-// import session from "express-session";
-// import flash from "express-flash";
-
 var express = require('express'),
     path = require('path'),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
+    mongoose = require('mongoose'),
     session = require("express-session"),
     flash = require("express-flash");
 
@@ -23,6 +17,12 @@ const app = express();
 require('dotenv').load();
 
 const routes = require('./routes/index');
+
+mongoose.connect(process.env.MONGODB_URI, (err, db) => {
+  if(err) {console.log(err);}
+
+  console.log(`Connected to ${process.env.MONGODB_URI}`);
+});
 
 app.set('view engine', 'ejs');
 

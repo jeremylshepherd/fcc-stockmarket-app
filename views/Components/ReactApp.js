@@ -39,6 +39,7 @@ export default class ReactApp extends React.Component {
         return (
             <div>
                 <Charts stocks={this.state.stocks}/>
+                <pre>{JSON.stringify(this.state.data, null, 2)}</pre>
                 <Footer />
             </div>
         );
