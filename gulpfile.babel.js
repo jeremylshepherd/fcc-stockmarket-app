@@ -30,7 +30,7 @@ gulp.task('build-css', () => {
 });
 
 gulp.task("sass:watch", () => {
-    gulp.watch('src/app.sass', ['sass']);    
+    gulp.watch('src/*.sass', ['build-css']);    
     
     
 });

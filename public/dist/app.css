@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css?family=Michroma|Orbitron|Sarpanch|Syncopate");
+.card {
+  display: inline-block;
+  margin: 1em;
+  width: 18em; }
+  .card:hover {
+    transition: all .5s ease-in-out; }
+
+body {
+  padding-bottom: 60px; }
+
+.container,
+.container-fluid {
+  max-width: 95%;
+  margin: 0 auto; }
+
+svg {
+  background-color: rgba(255, 255, 255, 0.2); }
+
+.stock {
+  font-family: 'Michroma', sans-serif; }
