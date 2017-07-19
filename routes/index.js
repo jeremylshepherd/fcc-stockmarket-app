@@ -120,43 +120,6 @@ router.post('/api/add', (req, res) => {
     getStocks(sym, done);
 });
 
-router.get('/api/test/:sym', (req, res) => {
-    let sym = req.params.sym.toUpperCase();
-    let getStocks = (sym, fn) => {
-        const options = {  
-            url: `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${sym}&interval=15min&outputsize=full&apikey=${process.env.API_KEY}`,
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Accept-Charset': 'utf-8'
-            }
-        };
-        console.log(options.url);
-        request(options, function(err, res, body) {
-            if(err) {fn(err, null);}
-            fn(null, JSON.parse(body));
-        });
-    };
-    let done = (err, results) => {
-        if(err) {
-            console.log('err');
-            res.json(err);
-        }
-        if(Object.keys(results)[0] === 'Error Message'){
-            res.json({'message': 'Please use a valid symbol'});
-        }else{
-            Stock.findOne({}, (err, stock) => {
-                if(err) {console.log(err);}
-                stock.stocks.addToSet(sym);
-                stock.save();
-                res.json({'message' : 'Stock saved.'});
-            });
-        }
-    };
-    getStocks(sym, done);
-});
-
-
 router.post('/api/del', (req, res) => {
     Stock.findOne({}, (err, stock) => {
         if(err) {console.log(err);}
