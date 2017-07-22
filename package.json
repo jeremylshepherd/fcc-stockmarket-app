@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "Real-time Stock Market Data Application.",
   "main": "server.js",
-  "repository": "",
+  "repository": "https://github.com/jeremylshepherd/fcc-stockmarket-app",
   "engines": {
     "node": "4.7.3",
-    "npm": "2.15.11"
+    "npm": "5.3.0"
   },
   "scripts": {
     "start": "node server.js"
@@ -37,14 +37,11 @@
     "gulp-reactify": "^3.0.1",
     "gulp-sass": "^2.3.2",
     "jquery": "^3.1.0",
-    "mongoose": "^4.11.1",
     "react": "^15.2.1",
-    "react-d3-basic": "^1.6.11",
     "react-dom": "^15.2.1",
-    "react-router": "^3.0.0",
     "recharts": "^1.0.0-alpha.2",
     "request": "^2.81.0",
-    "socket.io": "~0.9.14",
+    "socket.io": "^2.0.3",
     "vinyl-source-stream": "^1.1.0"
   }
 }

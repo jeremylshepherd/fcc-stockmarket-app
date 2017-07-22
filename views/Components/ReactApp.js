@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import Charts from "./Charts";
 import Cards from "./Cards";
 import $ from "jquery";
+import SocketIOClient from "socket.io-client";
 
 export default class ReactApp extends React.Component {
     
@@ -11,69 +12,45 @@ export default class ReactApp extends React.Component {
         
         this.state = {
             stocks: [],
-            message: ''
+            flash: ''
         };
         
         this.getStocks = this.getStocks.bind(this);
         this.removeSym = this.removeSym.bind(this);
         this.addSym = this.addSym.bind(this);
+        this.flash = this.flash.bind(this);
         this.clearFlash = this.clearFlash.bind(this);
-    }
-    
-    getStocks() {
-        $.ajax({
-        url: '/api/stocks',
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
+        
+        this.socket = SocketIOClient();
+        this.socket.on('console', (msg) => {
+            this.flash(msg);
+            this.socket.emit('data', 'data');
+        });
+        this.socket.on('error', (msg) => {
+            this.flash(msg);
+        });
+        this.socket.on('update', (data) => {
+            console.log(data);
             this.setState({
                 stocks: data
             });
-        }.bind(this),
-        error: function(xhr, status, err) {
-          console.error('/api/stocks', status, err.toString());
-        }.bind(this)
-      });
+        });
+    }
+    
+    flash(str) {
+        this.setState({flash: str});
+    }
+    
+    getStocks() {
+        this.socket.emit('data', 'getStocks');
     }
     
     addSym(str) {
-        let obj = {sym:str};
-        $.ajax({
-          url: `/api/add`,
-          dataType: 'json',
-          type: 'POST',
-          data: obj,
-          success: function(data) {
-              this.setState({
-                  message: data.message
-              });
-              this.getStocks();
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(`/api/add`, status, err.toString());
-          }.bind(this)
-        });
-        console.log(`${str} added!`);
+        this.socket.emit('add', str.toUpperCase());
     }
     
     removeSym(str) {
-        let obj = {sym:str};
-        $.ajax({
-          url: `/api/del`,
-          dataType: 'json',
-          type: 'POST',
-          data: obj,
-          success: function(data) {
-              this.setState({
-                  message: data.message
-              });
-              this.getStocks();
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(`/api/add`, status, err.toString());
-          }.bind(this)
-        });
-        console.log(`${str} removed!`);
+        this.socket.emit('del', str.toUpperCase());
     }
     
     componentDidMount() {
@@ -81,7 +58,7 @@ export default class ReactApp extends React.Component {
     }
     
     componentDidUpdate() {
-        if(this.state.message){
+        if(this.state.flash){
           this.clearFlash();
         }
     }
@@ -89,8 +66,8 @@ export default class ReactApp extends React.Component {
     clearFlash(){
         setTimeout(() => {
         console.log('timer activated');
-            this.setState({message: ''});
-        }, 10000);
+            this.setState({flash: ''});
+        }, 7000);
     }
     
     render() {
@@ -102,14 +79,14 @@ export default class ReactApp extends React.Component {
         let stocks = this.state.stocks.map((s, i) => {
             s.color = flatUI[i];
             return s;
-        })
+        });
         return (
             <div>
                 <div className="container">
-                    <h1 className="text-center text-info stock">Free Code Camp | Stock Market App</h1>
+                    <h1 className="text-center text-info stock h1">Free Code Camp | Stock Market App</h1>
                 </div>
-                <Charts stocks={this.state.stocks}/>
-                <Cards stocks={this.state.stocks} message={this.state.message} remove={this.removeSym} add={this.addSym}/>
+                <Charts stocks={stocks}/>
+                <Cards stocks={stocks} message={this.state.flash} remove={this.removeSym} add={this.addSym}/>
                 <Footer />
             </div>
         );

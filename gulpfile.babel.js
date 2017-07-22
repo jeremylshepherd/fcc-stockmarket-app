@@ -4,6 +4,9 @@ import gulp from "gulp";
 import browserify from "browserify";
 import source from "vinyl-source-stream";
 import sass from "gulp-sass";
+require("dotenv").load();
+
+let tasks;
 
 gulp.task("build-js", () => {
     
@@ -29,16 +32,21 @@ gulp.task('build-css', () => {
     .pipe(gulp.dest('public/dist'));
 });
 
-gulp.task("sass:watch", () => {
-    gulp.watch('src/*.sass', ['build-css']);    
+if(process.env.NODE_ENV === 'development') {
+    gulp.task("sass:watch", () => {
+        gulp.watch('src/*.sass', ['build-css']);    
+    });
     
+    gulp.task("js:watch", () => {
+        gulp.watch('src/app.js', ['build-js']);
+        gulp.watch('views/Components/*.js', ['build-js']);
+        gulp.watch('views/Components/*.js', ['build-react']);
+    });
     
-});
-
-gulp.task("js:watch", () => {
-    gulp.watch('src/app.js', ['build-js']);
-    gulp.watch('views/Components/*.js', ['build-js']);
-    gulp.watch('views/Components/*.js', ['build-react']);
-});
+    tasks = ["build-js", "build-react", "build-css", "sass:watch", "js:watch"];
+}else{
+    tasks = ["build-js", "build-react", "build-css"];
+}
 // "build-react",
-gulp.task("default", ["build-js", "build-react", "build-css", "sass:watch", "js:watch"]);
+
+gulp.task('default', tasks);

@@ -1,20 +1,16 @@
 import React, { Component, } from 'react';
 import Chart from './Chart';
 
-export default class Charts extends Component {
-  constructor(props) {
-    super(props);
+const Charts = (props) => {
+    const factor = 800/this.props.stocks.length;
     
-  }
-
-  render() {
-    const factor = 600/this.props.stocks.length;
     let charts = this.props.stocks.map((c, i) => {
       let numFormat = c.data.map((d) => {
         d.close = +d.close;
         return d;
       });
-        return <Chart 
+        return ( 
+              <Chart 
                 sym={c.sym} 
                 stock={numFormat} 
                 key={i} index={i} 
@@ -22,11 +18,13 @@ export default class Charts extends Component {
                 height={factor} 
                 color={c.color}
               />
+            );
     });
     return (
         <div>
           {charts}
         </div>
       );
-  }
-}
+  };
+
+export default Charts;
