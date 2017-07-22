@@ -70299,9 +70299,9 @@ var _Chart2 = _interopRequireDefault(_Chart);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Charts = function Charts(props) {
-  var factor = 800 / undefined.props.stocks.length;
+  var factor = 800 / props.stocks.length;
 
-  var charts = undefined.props.stocks.map(function (c, i) {
+  var charts = props.stocks.map(function (c, i) {
     var numFormat = c.data.map(function (d) {
       d.close = +d.close;
       return d;

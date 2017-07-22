@@ -2,9 +2,9 @@ import React, { Component, } from 'react';
 import Chart from './Chart';
 
 const Charts = (props) => {
-    const factor = 800/this.props.stocks.length;
+    const factor = 800/props.stocks.length;
     
-    let charts = this.props.stocks.map((c, i) => {
+    let charts = props.stocks.map((c, i) => {
       let numFormat = c.data.map((d) => {
         d.close = +d.close;
         return d;
